@@ -38,7 +38,7 @@ All colors MUST be HSL.
     --ring: 213 93% 67%;
 
     /* Admin-specific colors */
-    --admin-bg: 248 250 252;
+    --admin-bg: 248 12% 98%;
     --admin-surface: 0 0% 100%;
     --admin-surface-hover: 244 75% 99%;
     --admin-accent: 213 93% 67%;
