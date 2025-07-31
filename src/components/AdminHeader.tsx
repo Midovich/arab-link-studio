@@ -17,6 +17,15 @@ const AdminHeader = () => {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
+            <Link to="/">
+              <Button 
+                variant="admin-ghost" 
+                size="sm"
+                className="hidden sm:flex"
+              >
+                عرض الموقع
+              </Button>
+            </Link>
             <Link to="/analytics">
               <Button 
                 variant="admin-outline" 

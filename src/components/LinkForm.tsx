@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Upload, X, Plus, Image as ImageIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { linkStorage } from "@/lib/storage";
 
 interface LinkFormData {
   image: File | null;
@@ -54,7 +55,7 @@ const LinkForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.title || !formData.url) {
@@ -66,20 +67,38 @@ const LinkForm = () => {
       return;
     }
 
-    // Here you would typically send the data to your backend
-    toast({
-      title: "تم بنجاح",
-      description: "تم إضافة الرابط بنجاح",
-    });
+    try {
+      // Save to localStorage
+      const linkEntry = await linkStorage.add({
+        title: formData.title,
+        url: formData.url,
+        image: imagePreview || "",
+        tags: formData.tags
+      });
 
-    // Reset form
-    setFormData({
-      image: null,
-      title: "",
-      url: "",
-      tags: []
-    });
-    setImagePreview(null);
+      toast({
+        title: "تم بنجاح",
+        description: "تم إضافة الرابط بنجاح",
+      });
+
+      // Reset form
+      setFormData({
+        image: null,
+        title: "",
+        url: "",
+        tags: []
+      });
+      setImagePreview(null);
+
+      // Trigger refresh of latest entries (parent component will handle)
+      window.dispatchEvent(new CustomEvent('linkAdded'));
+    } catch (error) {
+      toast({
+        title: "خطأ",
+        description: "حدث خطأ أثناء إضافة الرابط",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
